@@ -14,7 +14,10 @@
     \end{center}
 }}
 
-\newcommand{\psubsection}[1]{{\section*{#1}}}
+\newcommand{\psubsection}[1]{
+    \noindent 
+    \section*{#1}
+}
 
 \begin{document}
 
@@ -25,8 +28,6 @@
 \psection{Proposal}
 
 \psubsection{Abstract}
-
-\noindent
 The $n$-body problem aims to solve for the motion of $n$ particles that influence each other gravitationally. The mutual influence(s) is determined by the gravitational law(s) that the system obeys. The 2-body problem has a complete analytic solution for classical systems, systems that abide by the rules of classical mechanics. However, things get more complicated for n $\ge$ 3, these only have analytic solutions for special cases and have to be approached numerically otherwise. \\
 
 \psubsection{Strategy}
