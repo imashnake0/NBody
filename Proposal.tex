@@ -1,8 +1,26 @@
 \documentclass[hidelinks, 11pt, dvipsnames]{article}
 
-\title{Title}
+\title{Gravitational N-body Problem}
 
-\usepackage[letterpaper,margin=1in]{geometry}
+\author{Kamalesh Paluru \\ Omer Sipra}
+
+\usepackage[letterpaper,margin=0.7in]{geometry}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Proposal}
+}
+
+
+\geometry{
+    top = 0.5in,
+    right = 0.9in,
+    left = 0.9in,
+}
 
 \newcommand{\psection}[1]{{
     \begin{center}
@@ -12,17 +30,37 @@
     \end{center}
 }}
 
-\newcommand{\psubsection}[1]{{\section*{#1}}}
+\newcommand{\psubsection}[1]{
+    \noindent 
+    \section*{#1}
+}
 
 \begin{document}
 
 \maketitle
 
-\psection{Section}
+\newpage
 
-\psubsection{Sub-section}
+\psection{Proposal}
 
-\noindent
-Body.
+\psubsection{Abstract}
+The $n$-body problem aims to solve for the motion of $n$ particles that influence each other ``gravitationally''. The mutual influence(s) is determined by the gravitational law(s) that the system obeys. The 2-body problem has a complete analytic solution for classical systems, systems that abide by the rules of classical mechanics. However, things get more complicated for n $\ge$ 3, these only have analytic solutions for special cases and have to be approached numerically otherwise.
+
+\psubsection{Strategy}
+Since there is a range of laws and number of particles that we can pick from, we have candidates for \textbf{tests} and \textbf{approximations}. Assuming we have ``pre-requisite'' code to numerically solve a general $n$-body problem, we will approach the set of general $n$-body problems in the following order:
+\begin{itemize}
+    \item \textbf{Classical 2-body problem} \\ 
+    \textsc{sanity check}: The easiest way to verify that our pre-requisite code works is to test it on well known 2-body systems. The Earth-Sun and Earth-Moon systems are good candidates since they have been extensively tested in the past (for launching satelites, etc). We can solve this problem \emph{analytically} and compare it to the results we get from our pre-requisite code (using integration methods). This mostly serves as a glorified sanity check.
+    \item \textbf{Classical 3-body problem} \\ 
+    \textsc{lagrange points}: As a continuation to the previous \textbf{test}, we will run our pre-requisite code for the analytically solveable, restricted Earth-Sun-Satellite 3-body problem. We will also explore the Lagrange Points of this system and the behaviour of the satellite at and around these points. \\
+    \textsc{scattering}: We will then look at a more general 3-body problem with a binary system and an incomming body in detail. The calculations for this will be done numerically.
+    \item \textbf{Relativity and Quantum} \\
+    Finally, we will increase the scope by considering other gravitational \emph{laws}. These are harder to solve for even two bodies so we will look at special cases of the 2-body problem and other cases that our pre-requisite code supports. \\
+    \textsc{numerical relativity}: We will look at a Kepler problem (special 2-body problem with an infinitesimal mass, $m \ll M$) involving a black hole (or a similarly massive body, with mass $M$) and a photon (or a similarly infinitesimal mass, with some mass $m$). \\
+    \textsc{few-body}: We will briefly explore how a two-body system behaves in the quantum realm. 
+\end{itemize}
+
+\psubsection{Program}
+The ``pre-requisite'' code will primarily be written in Python. With \texttt{C} and \texttt{C++} code as needed for performance. Libraries like \href{https://numpy.org/}{NumPy} and \href{https://matplotlib.org/}{Matplotlib} will be used for perfomant math operations and visuals respectively. There are also number of open-source Python/\texttt{C}/\texttt{C++} libraries aimed at solving $n$-body problems that we will compare our results against: \href{https://github.com/mockingbirdnest/Principia}{mockingbirdnest/Principia}, \href{https://github.com/hannorein/rebound}{hannorein/rebound}, \href{https://github.com/Kushaalkumar-pothula/gravitylab}{Kushaalkumar-pothula/gravitylab}, to name a few. We will also have a \href{https://www.qt.io/qt-for-python}{GUI} for ease of use!
 
 \end{document}
