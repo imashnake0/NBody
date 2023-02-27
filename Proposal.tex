@@ -5,9 +5,21 @@
 \author{Kamalesh Paluru \\ Omer Sipra}
 
 \usepackage[letterpaper,margin=0.7in]{geometry}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Proposal}
+}
+
 
 \geometry{
-    top = 0.8in
+    top = 0.5in,
+    right = 0.9in,
+    left = 0.9in,
 }
 
 \newcommand{\psection}[1]{{
@@ -47,5 +59,8 @@ Since there is a range of laws and number of particles that we can pick from, we
     \textsc{numerical relativity}: We will look at a Kepler problem (special 2-body problem with an infinitesimal mass, $m \ll M$) involving a black hole (or a similarly massive body, with mass $M$) and a photon (or a similarly infinitesimal mass, with some mass $m$). \\
     \textsc{few-body}: We will briefly explore how a two-body system behaves in the quantum realm. 
 \end{itemize}
+
+\psubsection{Program}
+The ``pre-requisite'' code will primarily be written in Python. With \texttt{C} and \texttt{C++} code as needed for performance. Libraries like \href{https://numpy.org/}{NumPy} and \href{https://matplotlib.org/}{Matplotlib} will be used for perfomant math operations and visuals respectively. There are also number of open-source Python/\texttt{C}/\texttt{C++} libraries aimed at solving $n$-body problems that we will compare our results against: \href{https://github.com/mockingbirdnest/Principia}{mockingbirdnest/Principia}, \href{https://github.com/hannorein/rebound}{hannorein/rebound}, \href{https://github.com/Kushaalkumar-pothula/gravitylab}{Kushaalkumar-pothula/gravitylab}, to name a few. We will also potentially have a \href{https://www.qt.io/qt-for-python}{GUI} for ease of use.
 
 \end{document}
