@@ -1,7 +1,8 @@
 import numpy as np
+import astropy.constants as const
 
-from src.Body import Body
-from src.System import System
+from Body import Body
+from System import System
 
 
 def main():
@@ -9,5 +10,7 @@ def main():
                  position=np.array([0, 0]),
                  velocity=np.array([0, 0]))
     system = System(earth)
+    print(const.G)
+
 
 main()
