@@ -40,6 +40,3 @@ class System:
             
             t += dt
             self.update_net_forces()
-
-        for body in self.bodies:
-            print(body.position)

@@ -20,10 +20,9 @@ def main():
     system = System(bodies=[earth, sun], 
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x1 - x2))**3)) * (x1 - x2))
 
-    system.simulate(until=10.0)
+    system.simulate(until=0.1)
 
-    fig, ax = plt.subplots()
-    ax.scatter(sun.position,  linewidth=2.0)
-    plt.show()
+    for body in system.bodies:
+        print(f"{body.name}:\n{body.position}")
 
 main()

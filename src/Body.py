@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Body:
     def __init__(self,
                  name,
