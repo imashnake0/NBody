@@ -2,13 +2,14 @@ import numpy as np
 
 class System:
     def update_net_forces(self):
-        for body in self.bodies:
-            for other_body in self.bodies:
-                body.net_force += self.law(body.mass, 
-                                      other_body.mass, 
-                                      # Updates for the most recent position.
-                                      body.position[-1], 
-                                      other_body.position[-1])
+        for i, body in enumerate(self.bodies):
+            for j, other_body in enumerate(self.bodies):
+                if i != j:
+                    body.net_force += self.law(body.mass, 
+                                        other_body.mass, 
+                                        # Updates for the most recent position.
+                                        body.position[-1], 
+                                        other_body.position[-1])
 
     def __init__(self,
                  bodies=[],
@@ -16,12 +17,13 @@ class System:
         self.bodies = np.array(bodies)
         self.law = law
 
-        for body in bodies:
-            for other_body in bodies:
-                body.net_force += law(body.mass, 
-                                      other_body.mass, 
-                                      body.position[0], 
-                                      other_body.position[0])
+        for i1, body in enumerate(bodies):
+            for i2, other_body in enumerate(bodies):
+                if i1 != i2:
+                    body.net_force += law(body.mass, 
+                                        other_body.mass, 
+                                        body.position[0], 
+                                        other_body.position[0])
 
     def simulate(self,
                  until=0.0,
@@ -29,5 +31,11 @@ class System:
         t = 0.0
         while t < until:
             for body in self.bodies:
-                np.append(body.position, [[0, 0]], axis=0)
+                # TODO: Update `position` and `velocity`!
+                body.velocity = np.append(body.position, [[0, 0]], axis=0)
+                body.position = np.append(body.position, [[0, 0]], axis=0)
             t += dt
+
+        for body in self.bodies:
+            print(body.position)
+            print(body.velocity)
