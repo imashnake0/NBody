@@ -1,6 +1,15 @@
 import numpy as np
 
 class System:
+    def update_net_forces(self):
+        for body in self.bodies:
+            for other_body in self.bodies:
+                body.net_force += self.law(body.mass, 
+                                      other_body.mass, 
+                                      # Updates for the most recent position.
+                                      body.position[-1], 
+                                      other_body.position[-1])
+
     def __init__(self,
                  bodies=[],
                  law=None):
@@ -11,8 +20,8 @@ class System:
             for other_body in bodies:
                 body.net_force += law(body.mass, 
                                       other_body.mass, 
-                                      body.position, 
-                                      other_body.position)
+                                      body.position[0], 
+                                      other_body.position[0])
 
     def simulate(self,
                  until=0.0,
