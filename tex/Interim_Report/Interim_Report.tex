@@ -6,6 +6,7 @@
 
 \usepackage[letterpaper,margin=0.7in]{geometry}
 \usepackage{hyperref}
+\usepackage{amsmath}
 
 \hypersetup{
     colorlinks=true,
@@ -35,10 +36,26 @@
     \section*{#1}
 }
 
+
+\newcommand{\psubsubsection}[1]{
+    \noindent
+    \subsection*{#1}
+}
+
 \begin{document}
 
 \maketitle
 
+\psubsection{Summary of Contributions}
+\psubsubsection{Omer Sipra}
+\begin{itemize}
+    \item Worked primarily on documentation and theory for the N-body problem.
+\end{itemize}
+
+\psubsubsection{Kamalesh Paluru}
+\begin{itemize}
+    \item Implemented the theory and created a program to simulate an N-body system.
+\end{itemize}
 \newpage
 
 \psection{Interim Report}
@@ -49,7 +66,37 @@ We decided to start with the most basic case: The classical 2-body problem. Once
 
     \begin{itemize}
         \item \texttt{Body}: This class represents a body in our N-\texttt{body} system.
-        \item \texttt{System}: This class takes a list of \texttt{Body} objects and contains methods to modify an instance of the system.
+        \item \texttt{System}: This class takes a list of \texttt{Body} objects and contains methods to modify an instance of the system (and the bodies in it).
     \end{itemize}
 
+\noindent
+Using OOP made it much easier to create a strong foundation and will help make it easier to generify the program.
+
+    \psubsubsection{\texttt{System.simulate(until=time)}}
+
+    \begin{itemize}
+        \item This method mutates the body object in \texttt{System}, it hence returns the updated positions and velocities of the bodies.
+        \item The equations used for the classical 2-body system are relatively simple, \texttt{simulate} algorithmically updates the positions and velocities of each body:
+        \begin{itemize}
+            \item Repeats the following steps for every time differential in a given time interval:
+            \item Update the velocity of every body using:
+            \[ \vec{v}_f = \vec{v}_i + d\vec{v} \]
+            \[ \vec{v}_f = \vec{v}_i + \vec{a} \cdot dt \]
+            \[ \vec{v}_f = \vec{v}_i + \frac{\vec{F}_\text{net}}{m} \cdot dt \]
+            Here; $m$ is the mass of the body, $\vec{v}_i$ is the initial velocity, $\vec{F}_\text{net}$ is initially calculated by the constructor (and later updated) when \texttt{System} is initialized, and $dt$ is the given time differential.
+            \item Update the position of every body using:
+            \[ \vec{x}_f = \vec{x}_i + d\vec{x} \]
+            \[ \vec{x}_f = \vec{x}_i + \vec{v}_i \cdot dt \]
+            \item Tick the clock:
+            \[ t_f = t_i + dt \]
+            \item Finally, we update the net force on each body using the updated positions and velocities.
+        \end{itemize}
+    \end{itemize}
+
+    \psubsection{Validation}
+
+    \begin{itemize}
+        \item Unfortunately, the position of \texttt{earth} doesn't have the expected sequence of values. We highly suspect there is something wrong with the way the position/velocities are updated. \texttt{sun} however does seem to stay close to the origin as expected.
+        \item Although we can't produce plots just yet (for the reason above), we have a strong foundation to build upon with these base classes.
+    \end{itemize}
 \end{document}
