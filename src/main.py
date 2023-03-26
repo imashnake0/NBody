@@ -15,7 +15,7 @@ def main():
     sun = Body(mass=aconst.M_sun.value)
     
     system = System(bodies=[earth, sun], 
-                    law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x1 - x2))**2)) * (x1 - x2))
+                    law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x1 - x2))**3)) * (x1 - x2))
 
     system.simulate()
 

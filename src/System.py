@@ -38,4 +38,3 @@ class System:
 
         for body in self.bodies:
             print(body.position)
-            print(body.velocity)
