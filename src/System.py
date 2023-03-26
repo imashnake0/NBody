@@ -31,10 +31,15 @@ class System:
         t = 0.0
         while t < until:
             for body in self.bodies:
-                # TODO: Update `position` and `velocity`!
-                body.velocity = np.append(body.velocity, [[0, 0]], axis=0)
-                body.position = np.append(body.position, [[0, 0]], axis=0)
+                # dv = a * dt = (F_net/m) * dt
+                dv = body.net_force * (dt/body.mass)
+                body.velocity = np.append(body.velocity, [body.velocity[-1] + dv], axis=0)
+                # dx = v * dt
+                dx = body.velocity[-2] * dt
+                body.position = np.append(body.position, [body.position[-1] + dx], axis=0)
+            
             t += dt
+            self.update_net_forces()
 
         for body in self.bodies:
             print(body.position)
