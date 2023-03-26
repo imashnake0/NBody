@@ -32,7 +32,7 @@ class System:
         while t < until:
             for body in self.bodies:
                 # TODO: Update `position` and `velocity`!
-                body.velocity = np.append(body.position, [[0, 0]], axis=0)
+                body.velocity = np.append(body.velocity, [[0, 0]], axis=0)
                 body.position = np.append(body.position, [[0, 0]], axis=0)
             t += dt
 
