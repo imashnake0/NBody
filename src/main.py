@@ -4,8 +4,8 @@ import astropy.constants.iau2015 as aconst
 import astropy.constants.codata2018 as coconst
 import matplotlib.pyplot as plt
 
-from Body import Body
-from System import System
+from core.Body import Body
+from core.System import System
 
 
 def main():
