@@ -3,12 +3,23 @@ import numpy.linalg as lin
 import astropy.constants.iau2015 as aconst
 import astropy.constants.codata2018 as coconst
 import matplotlib.pyplot as plt
+from plot.PlotUtils import PlotUtils
 
 from core.Body import Body
 from core.System import System
 
 
 def main():
+    rock1 = Body(name="Rock1",
+                 mass=1,
+                 position=[[1, 0]],
+                 velocity=[[0, 1]])
+    
+    rock2 = Body(name="Rock2",
+                 mass=1000,
+                 position=[[0, 0]],
+                 velocity=[[0, 0]])
+
     earth = Body(name="Earth",
                  mass=aconst.M_earth.value, 
                  position=[[aconst.au.value, 0]], 
@@ -17,12 +28,12 @@ def main():
     sun = Body(name="Sun",
                mass=aconst.M_sun.value)
     
-    system = System(bodies=[earth, sun], 
-                    law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x1 - x2))**3)) * (x1 - x2))
+    system = System(bodies=[rock1, rock2], 
+                    law=lambda m1, m2, x1, x2: x2 - x1)
+                    # law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x1 - x2))**3)) * (x2 - x1))
 
-    system.simulate(until=0.1)
+    system.simulate(until=20)
 
-    for body in system.bodies:
-        print(f"{body.name}:\n{body.position}")
+    PlotUtils.plot((rock1.position[:, 0], rock2.position[:, 0], "x"), (rock1.position[:, 1], rock2.position[:, 1], "y"), "Earth")
 
 main()

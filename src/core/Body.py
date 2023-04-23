@@ -11,4 +11,4 @@ class Body:
         self.mass = mass
         self.position = np.array(position)
         self.velocity = np.array(velocity)
-        self.net_force = net_force
+        self.net_force = np.array(net_force)
