@@ -4,20 +4,20 @@ class PlotUtils:
     '''
     Class to make plotting easier (or harder).
     '''
-    def plot(x, y, title):
+    def plot(bodies):
         '''
-        Plot two lists agaist each other, the arguments are tuples.
+        Plot two multiple lists agaist each other, the argument is a list of bodies.
 
         Arguments
         ---------
-        `x`: Tuple containing a list of points on the x-axis followed by the title of the x-axis.
-        `y`: Tuple containing a list of points to plot followed by the title of the y-axis.
-        `title`: Title of the plot.
+        `bodies`: List of `Body`s, the positions of which are plotted.
         '''
         fig, ax = plt.subplots()
-        for graph in zip(x[:-1], y[:-1]):
-            ax.plot(graph[0], graph[1])
-
-        ax.set(xlabel=x[-1], ylabel=y[-1], title=title)
+        for body in bodies:
+            ax.plot(body.position[:, 0], body.position[:, 1])
+        
+        ax.legend(list(map(lambda body: body.name, bodies)))
+        ax.set(xlabel="x", ylabel="y")
+        
         ax.set_aspect('equal')
         plt.show()
