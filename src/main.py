@@ -3,7 +3,7 @@ import numpy.linalg as lin
 import astropy.constants.iau2015 as aconst
 import astropy.constants.codata2018 as coconst
 import matplotlib.pyplot as plt
-from plot.PlotUtils import PlotUtils
+from utils.PlotUtils import PlotUtils
 
 from core.Body import Body
 from core.System import System
