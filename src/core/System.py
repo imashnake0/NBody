@@ -27,7 +27,7 @@ class System:
 
     def simulate(self,
                  until=0.0,
-                 dt=0.001):
+                 dt=1000):
         t = 0.0
         while t < until:
             for body in self.bodies:
