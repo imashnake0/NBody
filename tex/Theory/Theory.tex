@@ -1,0 +1,174 @@
+\documentclass[hidelinks, 11pt, dvipsnames]{article}
+
+\title{PHYSICS 349: Advanced Computational Physics\\
+Final Project.\\
+\textbf{  } \\
+\textbf{N-Body Problem}}
+
+\author{Kamalesh Reddy Paluru\\
+Omer Sipra}
+
+\usepackage[letterpaper,margin=1in]{geometry}
+
+\newcommand{\psection}[1]{{
+    \begin{center}
+        \noindent \rule{17cm}{0.4pt}
+            \section*{\LARGE #1}
+        \noindent \rule{17cm}{0.4pt}
+    \end{center}
+}}
+
+\newcommand{\psubsection}[1]{{
+    \begin{center}
+            \section*{\Large #1}
+        \noindent \rule{17cm}{0.2pt}
+    \end{center}
+}}
+
+\newcommand{\psubsubsection}[1]{{\section*{#1}
+    \section*{\large #1}
+    \noindent \rule{17cm}{0.05pt}
+}}
+\begin{document}
+
+\maketitle
+
+\psection{Problem Foundations}
+The $N-$body problem is one of the most famous problems in classical physics. Being in discussion dating all the way back to Isaac Newton himself. \\
+
+The general problem involves predicting the motion of a finite number of celestial bodies that interact under gravity. Although in its modern renditions, it involves all dynamics of any number of any type of bodies, regardless of physical scale or the forces they are subject to.\\
+
+The 2-body problem was first solved by Isaac Newton in the 17th century, and then a general solution was proposed by Johann Bernoulli later. However, no such solution is possible in cases with 3 or more bodies in a system. Apart from a few special cases that allow for certain restrictions. \\
+
+Hence, for all other cases, we use numerical integration to find our results.\\
+
+This report will focus on developing methods of numerically solving any generic case of this problem. But before, we need to explore the theory behind it.
+
+\newpage
+\psubsection{Theory}
+We will contextualize the problem using the gravitational case. Treating the inputs as masses, positions and velocities of each body. \\
+
+The output would typically be the predictive trajectories as defined by solved functions of position and velocity. Assuming Newtonian physics. \\
+
+Suppose we have $n$ particles with masses $m_i$ and positions $\mathbf{r}_i(t)$. Then particle $i$ has a gravitational force exerted on it by particle $j$ given by:
+
+$$ \mathbf{f}_{i,j}(t) = -\frac{Gm_i m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+The total force on particle $i$ is then:
+
+$$ \mathbf{F}_i(t) = \sum_{j=0, j\ne i}^{n-1} \mathbf{f}_{i,j}(t) $$
+
+Which can be written as:
+$$ \mathbf{F}_i(t) = -Gm_i \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+We know from Newton's law that $\mathbf{F} = m\mathbf{a}$, or in this context:
+$$ \mathbf{F}_i(t) = m_i\mathbf{\ddot{r}}_i(t) $$
+
+We can now substitute these relations to obtain a second order differential equation system:
+$$ \mathbf{\ddot{r}}_i(t) = -G \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+This project, will hence focus on solving this exact problem.
+
+To make life easier, we will make some mathematical assumptions. Starting with the assumption that all the functions we will be dealing with, are functions of real numbers.
+
+\newpage
+
+\psection{Numerical Integration}
+
+We know certain pieces of information, such as the conditions:
+$$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(0) = \mathbf{v}_0 $$
+Thus, we have an \emph{initial}-value problem. \\
+
+If the conditions are of the form:
+$$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(t) = \mathbf{r}_f $$
+We call it a \emph{boundary}-value problem.\\
+
+These problems are different enough that their numerical solutions are distinct.\\
+
+We will now explore methods of how we can solve these problems in different contexts.\\
+\\
+
+An approach to numerical integration for solving our obtained differential equations would follow the steps:
+\begin{itemize}
+    \item Given input data (Initial Conditions)
+    \begin{itemize}
+        \item For each timestep $\Delta t$:
+        \begin{itemize}
+            \item For each particle $i$:
+            \begin{itemize}
+                \item Computer $F_i(t)$
+                \item Update $\mathbf{r_i}(t)$ and $\mathbf{\dot{r}}_i(t) = \mathbf{v}(t)$ for each particle $i$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Return position and velocity data computations.
+\end{itemize}
+\newpage
+
+\psubsection{Euler's Method}
+Euler's Method is designed to solve IVPs for first-order ordinary differential equations of the form:
+$$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
+Where it can be used the approximate numerically the values of the solution of the ODE: 
+$$ x_i=x_0+ih,\quad i=0,1, \dots,n, \nonumber $$
+Where:
+$$ h={b-x_0\over n}.\nonumber $$
+
+We do this by starting with the tangent to an integral curve, given by:
+$$ \label{eq:3.1.2} y=y(x_i)+f(x_i,y(x_i))(x-x_i) $$
+
+Setting the step $(x-x_i)$ to $h$, and using the IC $y(x_0) = y_0$ we can give a general expression for all solutions to $y(x)$ as:
+$$ \label{eq:3.1.4} y_{i+1}=y_i+hf(x_i,y_i),\quad 0\le i\le n-1. $$
+
+
+\psubsection{Runge Kutta Method (RK4)}
+Consider the same IVP as before:
+$$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
+We pick a step-size $h>0$ and define:
+$$ y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)h, $$
+$$ t_{n+1} = t_n + h, \ n= 0,1,2,3,...,n $$
+
+Where:
+\begin{itemize}
+    \item $k_{1}=h f\left(t_{n}, y_{n}\right)$
+    \item $k_{2}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{1}\right)$
+    \item $k_{3}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{2}\right)$
+    \item $k_{4}=h f\left(t_{n}+h, y_{n}+k_{3}\right)$
+\end{itemize}
+
+\psubsubsection{Note: Coupled ODEs}
+Notice how the previous two methods of numerical integration allow for solution of first-order ODEs. However, the problem we intend to solve, always involves second-order ODEs, as shown before. Luckily, there is a way to convert any such DE into two coupled first-order ODEs. Consider a generalized form of the n-body ODE we defined earlier:
+$$  \mathbf{\ddot{r}}(t) = -\mathbf{r}(t) $$
+
+We can convert this to a system of $2n$ first order ODEs:
+$$  \mathbf{\dot{r}_i}(t) = \mathbf{v}_i(t)$$
+$$\mathbf{\dot{v}_i}(t) = \frac{1}{m_i}\mathbf{F}_i(t)$$
+
+Under the initial conditions:
+$$ \mathbf{r}_i(0) = \mathbf{r}_i,0, \ \mathbf{v}_i(0) = \mathbf{v}_i,0 $$
+
+Allowing us to numerically solve any system.
+
+\psection{Tests}
+To test whether our codes correctly solves any given n-body system, we will test against cases of the problem that are known to have analytic solutions.
+
+Before that, lets explore some of the theory behind these problems:
+\psubsection{Classical 2-Body Problem}
+
+Consider 2 point masses $m_1$ and $m_2$, with their positions being defined by the vectors $\mathbf{r}_1$ and $\mathbf{r}_2$. The gravitation between the two particles is given by Newton's law of gravitation:
+$$\mathbf{F}=-\frac{G m_{1} m_{2}}{r^{2}} \frac{\mathbf{r}}{r}\nonumber$$
+
+Where the force on either particle would just be $m\mathbf{a}$:
+$$m_{1} \ddot{\mathbf{r}}_{1}=-\frac{G m_{1} m_{2}}{\left|\mathbf{r}_{2}-\mathbf{r}_{1}\right|^{3}}\left(\mathbf{r}_{1}-\mathbf{r}_{2}\right) \nonumber$$
+
+$$m_{2} \ddot{\mathbf{r}}_{2}=-\frac{G m_{1} m_{2}}{\left|\mathbf{r}_{2}-\mathbf{r}_{1}\right|^{3}}\left(\mathbf{r}_{2}-\mathbf{r}_{1}\right) \nonumber$$
+
+\psubsection{3-Body Problem, Lagrange Points}
+
+\psubsection{3-Body Problem, Scattering}
+
+\psubsection{Kepler Problem}
+
+\psubsection{Few Body Quantum system}
+
+
+\end{document}
