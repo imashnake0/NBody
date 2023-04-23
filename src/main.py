@@ -25,7 +25,15 @@ def main():
     sun = Body(name="Sun",
                mass=aconst.M_sun.value)
     
-    bodies=[halley, earth, sun]
+    L1 = [1.01*aconst.au.value, 0]
+
+    jwst = Body(name="JWST",
+                     mass=6500,
+                     position=[L1],
+                     velocity=[[0, 0]])
+
+    # TODO: For some odd reason, the order that the bodies are passed in matters. I'm blaming python's interpretted-ness but this should be fixed at some point.
+    bodies = [halley, earth, sun]
 
     system = System(bodies=bodies, 
                     # TODO: Natural units!
