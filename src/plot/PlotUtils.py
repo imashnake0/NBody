@@ -19,4 +19,5 @@ class PlotUtils:
             ax.plot(graph[0], graph[1])
 
         ax.set(xlabel=x[-1], ylabel=y[-1], title=title)
+        ax.set_aspect('equal')
         plt.show()
