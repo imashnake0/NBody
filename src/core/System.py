@@ -63,3 +63,4 @@ class System:
             for i, body in enumerate(self.bodies):
                 body.position = np.append(body.position, [step[i*2]], axis=0)
                 body.velocity = np.append(body.velocity, [step[i*2 + 1]], axis=0)
+            t += self.dt
