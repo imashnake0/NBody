@@ -25,14 +25,31 @@ Omer Sipra}
     \end{center}
 }}
 
-\newcommand{\psubsubsection}[1]{{\section*{#1}
-    \section*{\large #1}
-    \noindent \rule{17cm}{0.05pt}
+\newcommand{\psubsubsection}[1]{{
+    \section*{#1}
+    \noindent \rule{17cm}{0.11pt}
 }}
 \begin{document}
 
 \maketitle
+\psection{Statement}
+\psubsubsection{Omer Sipra (20824310)}
+\begin{itemize}
+    \item Worked primarily on documentation and theory for the N-body problem.
+    \item Picked and allocated implementations of the codes and where they belong, e.g. validation/application. 
+    \item Contributed to the designing of the RK4 integration method.
+    \item Contributed to the discussion about the better code for its purposes.
+\end{itemize}
 
+\psubsubsection{Kamalesh Paluru (20838240)}
+\begin{itemize}
+    \item Implemented the theory/
+    \item Contructed the Euler's method code. 
+    \item Contributed to the designing of the RK4 integration method.
+    \item Contributed to the discussion about the better code for its purposes.
+\end{itemize}
+
+\newpage
 \psection{Problem Foundations}
 The $N-$body problem is one of the most famous problems in classical physics. Being in discussion dating all the way back to Isaac Newton himself. \\
 
@@ -147,6 +164,7 @@ Under the initial conditions:
 $$ \mathbf{r}_i(0) = \mathbf{r}_i,0, \ \mathbf{v}_i(0) = \mathbf{v}_i,0 $$
 
 Allowing us to numerically solve any system.
+\newpage
 
 \psection{Tests}
 To test whether our codes correctly solves any given n-body system, we will test against cases of the problem that are known to have analytic solutions.
@@ -154,21 +172,94 @@ To test whether our codes correctly solves any given n-body system, we will test
 Before that, lets explore some of the theory behind these problems:
 \psubsection{Classical 2-Body Problem}
 
-Consider 2 point masses $m_1$ and $m_2$, with their positions being defined by the vectors $\mathbf{r}_1$ and $\mathbf{r}_2$. The gravitation between the two particles is given by Newton's law of gravitation:
-$$\mathbf{F}=-\frac{G m_{1} m_{2}}{r^{2}} \frac{\mathbf{r}}{r}\nonumber$$
+We will use the famous Kepler's problem as the first test to gauge how well our numerical methods work. 
 
-Where the force on either particle would just be $m\mathbf{a}$:
-$$m_{1} \ddot{\mathbf{r}}_{1}=-\frac{G m_{1} m_{2}}{\left|\mathbf{r}_{2}-\mathbf{r}_{1}\right|^{3}}\left(\mathbf{r}_{1}-\mathbf{r}_{2}\right) \nonumber$$
+In classical mechanics, the Kepler problem is essentially a special case of the 2-body problem in which bodies interact a radial inverse square potential. The problem is to find their position/speeds as a time series, given their masses, and initial positions, velocities. 
 
-$$m_{2} \ddot{\mathbf{r}}_{2}=-\frac{G m_{1} m_{2}}{\left|\mathbf{r}_{2}-\mathbf{r}_{1}\right|^{3}}\left(\mathbf{r}_{2}-\mathbf{r}_{1}\right) \nonumber$$
+The central force between two objects is defined as:
+$$ \mathbf{F} = \frac{k}{r^2} \mathbf{\hat(r)} $$
+Which corresponds to the scalar potential:
+$$ V(r) = \frac{k}{r} $$\\
+The equation of motion of a point mass in a particle is given by:
+$$ m\frac{d^2 r}{dt^2} - mr \omega^2 = 
+m\frac{d^2 r}{dt^2} - \frac{L^2}{mr^3} = -\frac{dV}{dr} $$
+
+Where $w = \frac{d\theta}{dt}$ and $L= mr^2 \omega$ (angular momentum) is conserved.\\
+
+This DE is of the same form as our general n-body ODE. Undee the condition that $L$ be non zero (which it is), we can convert this DE in polar coordinates, with $r$ being a $r(\theta)$ instead of $r(t)$:
+$$ \frac{d}{dt} = \frac{L}{mr^{2}} \frac{d}{d\theta} $$
+
+Making the DE independent of time:
+$$ \frac{L}{r^2} \frac{d}{d\theta} \left( \frac{L}{mr^2} \frac{dr}{d\theta} \right)- \frac{L^2}{mr^3} = -\frac{dV}{dr} $$.
+
+Finally we use chahnge of variable $u = \frac{1}{r}$ to make the ODE quasi-linear:
+$$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
+
+Which can be analytically solved to give us:
+$$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
+$$.
+
+Here, $e$ represents the eccentricity of the orbit, with it ranging between $0$ and $1$. The lower bound corresponding to perfect circular motion, and the upper bound corresponding to an unbound parabola. It relates to energy as:
+$e = \sqrt{1 + \frac{2EL^2}{k^2 m}}$. 
+
+Note that the eccentricity and angular momentum of the Earth are known to be:
+\begin{itemize}
+    \item $e = 0.0167$
+    \item $L =  2.7\times10^{40} \frac{kg m^2}{s}$
+\end{itemize}
+
+We can use this solution to model the Earth-Sun system. 
 
 \psubsection{3-Body Problem, Lagrange Points}
+As discussed earlier, the N-body problem has no analytical solutions in any cases involving 3 or more bodies. However, we do have some information from higher order problems that we can use to test our methods of integration. 
 
-\psubsection{3-Body Problem, Scattering}
+One such example are the Lagrange points and how they appear in the restricted 3 body problem. This problem refers to a special case of the 3-body problem where 2 of the masses involved are much bigger than the third. Turns out that the geometry of this problem reveals the existence of 5 equilibrium points in space in the vicinity of the 2 massive bodies. These are called Lagrange points, and their coordinates can be found analytically. 
 
-\psubsection{Kepler Problem}
+Consider hence, the restricted 3 body problem. With 3 masses $M_1$, $M_2$ and $m$, where $M_1, M_2 >> m$, and their respective positions are given by $r_1$, $r_2$, $r$. The total force exerted on the small mass $m$ is hence:
+$$ \mathbf{F}(t) = m\frac{d^2 \mathbf{r}(t)}{dt^2} = -\frac{G M_1 m}{|| \mathbf{r}(t) - \mathbf{r_1}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_1}_j(t))-\frac{G M_2 m}{|| \mathbf{r}(t) - \mathbf{r_2}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_2}_j(t)) $$
 
+Once again, we have a variation of our n-body ODE. However, only stationary solutions are possible for this version. The process involves conversion to a rotating reference frame. We will not be listing the complete derivation, however the final relation is of the form:
+$$ \mathbf{F}_{\Omega} = \Omega^2 (x-\frac{\beta R^3(x+\alpha R)}{((x+\alpha R)^2+y^2)^{3/2}}
+-\frac{\alpha R^3(x-\beta R)}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{i}}  + 
+\Omega^2 (x-\frac{\beta R^3y}{((x+\alpha R)^2+y^2)^{3/2}}
+-\frac{\alpha R^3y}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{j}}$$
+
+where:
+$$ \alpha = \frac{M_2}{M_1+M_2}, \ \ \beta = \frac{M_1}{M_1+M_2} $$\\
+
+In the limit $\alpha << 1$, we get the following Lagrange points:
+$$ L1: \bigg( R \bigg( 1-\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
+$$ L2: \bigg( R \bigg( 1+\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
+$$ L3: \bigg( -R \bigg( 1+\frac{15 \alpha}{12} \bigg), 0 \bigg) $$
+$$ L4: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), \frac{R\sqrt{3}}{2} \bigg) $$
+$$ L5: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), -\frac{R\sqrt{3}}{2} \bigg) $$
+
+For the Earth-Sun system,:
+\begin{itemize}
+    \item $\alpha \approx 3\times10^{-6} $
+    \item $R = 1 AU = 1.5 \times 10^8 km$
+\end{itemize}
+
+\newpage
+\psection{Testing}
+We can now use the previously exhbited methods of integrations to solve the tests we identified previously. 
+
+\psubsection{Kepler's Problem}
+Recall that we identitied the following ODE to be solvable analytically:
+$$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
+Giving us a solution of the form:
+$$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
+$$.
+
+ 
+\psubsubsection{Euler's Method}
+
+\newpage
+\psection{Applications}
 \psubsection{Few Body Quantum system}
+\psubsection{Halley's Comet}
 
 
+\newpage
+\psection{Conclusions and Dicsussion}
 \end{document}
