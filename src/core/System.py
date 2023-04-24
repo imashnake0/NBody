@@ -1,5 +1,6 @@
 import numpy as np
 import astropy.constants.codata2018 as coconst
+import utils.RKUtils as rk
 
 class System:
     def __init__(self,
@@ -50,9 +51,15 @@ class System:
         # Now that we filled in all the blanks, we can return `y_prime`.
         return y_prime
 
-    def simulate(self,
-                 until=0.0):
+    def simulate(self, until=0.0):
         t = 0.0
         while t < until:
+            # This is the next step of our special vector
+            step = rk.RK4_algorithm(f=self.derivator,
+                                    t_i=0.,
+                                    y_i=self.latest_vector(),
+                                    dt=self.dt)
             
-            t += self.dt
+            for i, body in enumerate(self.bodies):
+                body.position = np.append(body.position, [step[i*2]], axis=0)
+                body.velocity = np.append(body.velocity, [step[i*2 + 1]], axis=0)

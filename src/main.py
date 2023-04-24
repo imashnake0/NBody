@@ -36,7 +36,7 @@ def main():
     bodies = [halley, earth, sun]
 
     system = System(bodies=bodies, 
-                    dt=10000,
+                    dt=100000,
                     # TODO: Natural units!
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
 
