@@ -33,13 +33,14 @@ def main():
                      velocity=[[0, 0]])
 
     # TODO: For some odd reason, the order that the bodies are passed in matters. I'm blaming python's interpretted-ness but this should be fixed at some point.
-    bodies = [halley, earth, sun]
+    bodies = [earth, sun]
 
     system = System(bodies=bodies, 
+                    dt=1000,
                     # TODO: Natural units!
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
 
-    system.simulate(until=3.154e7*75)
+    system.simulate(until=3.154e7)
 
     PlotUtils.plot(bodies=bodies)
 
