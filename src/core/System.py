@@ -42,10 +42,10 @@ class System:
         for j, _y2 in enumerate(y):
             if j % 2 != 0:
                 for other_body in self.bodies:
-                    # TODO: Might have to change signs.
-                    y_prime[j] += G*other_body.mass*(y[j - 1] - other_body.position[-1])/(np.linalg.norm(y[j - 1] - other_body.position[-1]))**3
-
-                    # y_prime[j] = SUM_over_b(G*m_b*(y[j - 1] - x_b)/(np.linalg.norm(y[j - 1] - x_b))**3)
+                    # Prevent division by zero.
+                    if np.linalg.norm(y[j - 1] - other_body.position[-1]) != 0:
+                        # TODO: Might have to change signs.
+                        y_prime[j] += G*other_body.mass*(y[j - 1] - other_body.position[-1])/(np.linalg.norm(y[j - 1] - other_body.position[-1]))**3
 
         # Now that we filled in all the blanks, we can return `y_prime`.
         return y_prime
