@@ -3,9 +3,10 @@ import numpy as np
 class System:
     def update_net_forces(self):
         for i, body in enumerate(self.bodies):
+            body.net_force = 0
             for j, other_body in enumerate(self.bodies):
                 if i != j:
-                    body.net_force = self.law(body.mass, 
+                    body.net_force += self.law(body.mass, 
                                               other_body.mass, 
                                               # Updates for the most recent position.
                                               body.position[-1], 
