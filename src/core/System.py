@@ -1,13 +1,16 @@
 import numpy as np
 import astropy.constants.codata2018 as coconst
 import utils.EulerUtils as eu
+import utils.RK4Utils as rk
 
 class System:
     def __init__(self,
                  dt,
+                 algorithm,
                  bodies=[],
                  law=None):
         self.dt = dt
+        self.algorithm = algorithm
         self.bodies = np.array(bodies)
         self.law = law
 
@@ -44,12 +47,11 @@ class System:
         # Now that we filled in all the blanks, we can return `y_prime`.
         return y_prime
 
-
     def simulate(self, until=0.0):
         t = 0.0
         while t < until:
             # This is the next step of our special vector
-            step = eu.Euler_Algorithm(f=self.derivator,
+            step = self.algorithm(f=self.derivator,
                                       t_i=0.,
                                       y_i=self.latest_vector(),
                                       dt=self.dt)

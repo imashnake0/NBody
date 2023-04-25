@@ -4,6 +4,9 @@ import astropy.constants.iau2015 as aconst
 import astropy.constants.codata2018 as coconst
 import matplotlib.pyplot as plt
 
+import utils.EulerUtils as eu
+import utils.RK4Utils as rk
+
 from utils.PlotUtils import PlotUtils
 from utils.NaturalUnits import l_p, t_p, m_p
 from core.Body import Body
@@ -32,15 +35,14 @@ def main():
                      position=[L1],
                      velocity=[[0, 0]])
     
-    bodies = [earth, sun]
+    bodies = [halley, earth, sun]
 
     system = System(bodies=bodies,
-                    dt=10000,
+                    dt=100000,
+                    algorithm=rk.RK4_algorithm,
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
 
-    system.simulate(until=3.154e7)
-
-    print(earth.position)
+    system.simulate(until=3.154e7*75)
 
     PlotUtils.plot(bodies=bodies)
 
