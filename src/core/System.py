@@ -1,43 +1,62 @@
 import numpy as np
+import astropy.constants.codata2018 as coconst
+import utils.EulerUtils as eu
+import utils.RK4Utils as rk
 
 class System:
-    def update_net_forces(self):
-        for i, body in enumerate(self.bodies):
-            body.net_force = 0
-            for j, other_body in enumerate(self.bodies):
-                if i != j:
-                    body.net_force += self.law(body.mass, 
-                                              other_body.mass, 
-                                              # Updates for the most recent position.
-                                              body.position[-1], 
-                                              other_body.position[-1])
-
     def __init__(self,
+                 dt,
+                 algorithm,
                  bodies=[],
                  law=None):
+        self.dt = dt
+        self.algorithm = algorithm
         self.bodies = np.array(bodies)
         self.law = law
 
-        for i1, body in enumerate(bodies):
-            for i2, other_body in enumerate(bodies):
-                if i1 != i2:
-                    np.append(body.net_force, law(body.mass, 
-                                        other_body.mass, 
-                                        body.position[0], 
-                                        other_body.position[0]))
+    def latest_vector(self):
+        vec = np.array([self.bodies[0].position[-1], self.bodies[0].velocity[-1]])
+        for body in self.bodies[1:]:
+            vec = np.append(vec, [body.position[-1], body.velocity[-1]], axis=0)
+        return vec
 
-    def simulate(self,
-                 until=0.0,
-                 dt=100000):
+    def initial_vector(self):
+        vec = np.array([self.bodies[0].position[0], self.bodies[0].velocity[0]])
+        for body in self.bodies[1:]:
+            vec = np.append(vec, [body.position[0], body.velocity[0]], axis=0)
+        return vec
+    
+    def masses(self):
+        return np.array(list(map(lambda body: body.mass, self.bodies)))
+
+    def derivator(self, t, y):
+        G = coconst.G.value
+        # Here, we need to tell RK4 how to differentiate y, and then return it.
+        y_prime = np.zeros_like(y)
+        # Even indices of `y_prime` are just equal to the next index in y. 
+        for i, _y in enumerate(y):
+            if i % 2 == 0:
+                y_prime[i] = y[i + 1]
+
+        for j, _y2 in enumerate(y):
+            if j % 2 != 0:
+                for other_body in np.delete(self.bodies, int((j - 1)/2)):
+                    y_prime[j] += -G*other_body.mass*(y[j - 1] - other_body.position[-1])/(np.linalg.norm(y[j - 1] - other_body.position[-1]))**3
+
+
+        # Now that we filled in all the blanks, we can return `y_prime`.
+        return y_prime
+
+    def simulate(self, until=0.0):
         t = 0.0
         while t < until:
-            for body in self.bodies:
-                # dv = a * dt = (F_net/m) * dt
-                dv = body.net_force * (dt/body.mass)
-                body.velocity = np.append(body.velocity, [body.velocity[-1] + dv], axis=0)
-                # dx = v * dt
-                dx = body.velocity[-2] * dt
-                body.position = np.append(body.position, [body.position[-1] + dx], axis=0)
+            # This is the next step of our special vector
+            step = self.algorithm(f=self.derivator,
+                                      t_i=0.,
+                                      y_i=self.latest_vector(),
+                                      dt=self.dt)
             
-            t += dt
-            self.update_net_forces()
+            for i, body in enumerate(self.bodies):
+                body.position = np.append(body.position, [step[i*2]], axis=0)
+                body.velocity = np.append(body.velocity, [step[i*2 + 1]], axis=0)
+            t += self.dt
