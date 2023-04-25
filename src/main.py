@@ -32,12 +32,15 @@ def main():
                      position=[L1],
                      velocity=[[0, 0]])
     
-    bodies = [halley, earth, sun]
+    bodies = [earth, sun]
 
     system = System(bodies=bodies,
+                    dt=10000,
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
 
-    system.simulate(until=3.154e7*75)
+    system.simulate(until=3.154e7)
+
+    print(earth.position)
 
     PlotUtils.plot(bodies=bodies)
 
