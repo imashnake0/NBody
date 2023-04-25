@@ -13,14 +13,14 @@ Omer Sipra}
 \newcommand{\psection}[1]{{
     \begin{center}
         \noindent \rule{17cm}{0.4pt}
-            \section*{\LARGE #1}
+        \section*{\LARGE #1}
         \noindent \rule{17cm}{0.4pt}
     \end{center}
 }}
 
 \newcommand{\psubsection}[1]{{
     \begin{center}
-            \section*{\Large #1}
+        \section*{\Large #1}
         \noindent \rule{17cm}{0.2pt}
     \end{center}
 }}
@@ -31,235 +31,256 @@ Omer Sipra}
 }}
 \begin{document}
 
-\maketitle
-\psection{Statement}
-\psubsubsection{Omer Sipra (20824310)}
-\begin{itemize}
-    \item Worked primarily on documentation and theory for the N-body problem.
-    \item Picked and allocated implementations of the codes and where they belong, e.g. validation/application. 
-    \item Contributed to the designing of the RK4 integration method.
-    \item Contributed to the discussion about the better code for its purposes.
-\end{itemize}
-
-\psubsubsection{Kamalesh Paluru (20838240)}
-\begin{itemize}
-    \item Implemented the theory/
-    \item Contructed the Euler's method code. 
-    \item Contributed to the designing of the RK4 integration method.
-    \item Contributed to the discussion about the better code for its purposes.
-\end{itemize}
-
-\newpage
-\psection{Problem Foundations}
-The $N-$body problem is one of the most famous problems in classical physics. Being in discussion dating all the way back to Isaac Newton himself. \\
-
-The general problem involves predicting the motion of a finite number of celestial bodies that interact under gravity. Although in its modern renditions, it involves all dynamics of any number of any type of bodies, regardless of physical scale or the forces they are subject to.\\
-
-The 2-body problem was first solved by Isaac Newton in the 17th century, and then a general solution was proposed by Johann Bernoulli later. However, no such solution is possible in cases with 3 or more bodies in a system. Apart from a few special cases that allow for certain restrictions. \\
-
-Hence, for all other cases, we use numerical integration to find our results.\\
-
-This report will focus on developing methods of numerically solving any generic case of this problem. But before, we need to explore the theory behind it.
-
-\newpage
-\psubsection{Theory}
-We will contextualize the problem using the gravitational case. Treating the inputs as masses, positions and velocities of each body. \\
-
-The output would typically be the predictive trajectories as defined by solved functions of position and velocity. Assuming Newtonian physics. \\
-
-Suppose we have $n$ particles with masses $m_i$ and positions $\mathbf{r}_i(t)$. Then particle $i$ has a gravitational force exerted on it by particle $j$ given by:
-
-$$ \mathbf{f}_{i,j}(t) = -\frac{Gm_i m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
-
-The total force on particle $i$ is then:
-
-$$ \mathbf{F}_i(t) = \sum_{j=0, j\ne i}^{n-1} \mathbf{f}_{i,j}(t) $$
-
-Which can be written as:
-$$ \mathbf{F}_i(t) = -Gm_i \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
-
-We know from Newton's law that $\mathbf{F} = m\mathbf{a}$, or in this context:
-$$ \mathbf{F}_i(t) = m_i\mathbf{\ddot{r}}_i(t) $$
-
-We can now substitute these relations to obtain a second order differential equation system:
-$$ \mathbf{\ddot{r}}_i(t) = -G \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
-
-This project, will hence focus on solving this exact problem.
-
-To make life easier, we will make some mathematical assumptions. Starting with the assumption that all the functions we will be dealing with, are functions of real numbers.
-
-\newpage
-
-\psection{Numerical Integration}
-
-We know certain pieces of information, such as the conditions:
-$$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(0) = \mathbf{v}_0 $$
-Thus, we have an \emph{initial}-value problem. \\
-
-If the conditions are of the form:
-$$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(t) = \mathbf{r}_f $$
-We call it a \emph{boundary}-value problem.\\
-
-These problems are different enough that their numerical solutions are distinct.\\
-
-We will now explore methods of how we can solve these problems in different contexts.\\
-\\
-
-An approach to numerical integration for solving our obtained differential equations would follow the steps:
-\begin{itemize}
-    \item Given input data (Initial Conditions)
+    \maketitle
+    \psection{Statement}s
+    \psubsubsection{Omer Sipra (20824310)}
     \begin{itemize}
-        \item For each timestep $\Delta t$:
+        \item Worked primarily on documentation and theory for the N-body problem.
+        \item Picked and allocated implementations of the codes and where they belong, e.g. validation/application.
+        \item Contributed to the designing of the RK4 integration method.
+        \item Contributed to the discussion about the better code for its purposes.
+    \end{itemize}
+
+    \psubsubsection{Kamalesh Paluru (20838240)}
+    \begin{itemize}
+        \item Implemented the theory/
+        \item Contructed the Euler's method code.
+        \item Contributed to the designing of the RK4 integration method.
+        \item Contributed to the discussion about the better code for its purposes.
+    \end{itemize}
+
+    \newpage
+    \psection{Problem Foundations}
+    The $N-$body problem is one of the most famous problems in classical physics. Being in discussion dating all the way back to Isaac Newton himself. \\
+
+    The general problem involves predicting the motion of a finite number of celestial bodies that interact under gravity. Although in its modern renditions, it involves all dynamics of any number of any type of bodies, regardless of physical scale or the forces they are subject to.\\
+
+    The 2-body problem was first solved by Isaac Newton in the 17th century, and then a general solution was proposed by Johann Bernoulli later. However, no such solution is possible in cases with 3 or more bodies in a system. Apart from a few special cases that allow for certain restrictions. \\
+
+    Hence, for all other cases, we use numerical integration to find our results.\\
+
+    This report will focus on developing methods of numerically solving any generic case of this problem. But before, we need to explore the theory behind it.
+
+    \newpage
+    \psubsection{Theory}
+    We will contextualize the problem using the gravitational case. Treating the inputs as masses, positions and velocities of each body. \\
+
+    The output would typically be the predictive trajectories as defined by solved functions of position and velocity. Assuming Newtonian physics. \\
+
+    Suppose we have $n$ particles with masses $m_i$ and positions $\mathbf{r}_i(t)$. Then particle $i$ has a gravitational force exerted on it by particle $j$ given by:
+
+    $$ \mathbf{f}_{i,j}(t) = -\frac{Gm_i m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+    The total force on particle $i$ is then:
+
+    $$ \mathbf{F}_i(t) = \sum_{j=0, j\ne i}^{n-1} \mathbf{f}_{i,j}(t) $$
+
+    Which can be written as:
+    $$ \mathbf{F}_i(t) = -Gm_i \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+    We know from Newton's law that $\mathbf{F} = m\mathbf{a}$, or in this context:
+    $$ \mathbf{F}_i(t) = m_i\mathbf{\ddot{r}}_i(t) $$
+
+    We can now substitute these relations to obtain a second order differential equation system:
+    $$ \mathbf{\ddot{r}}_i(t) = -G \sum_{j=0, j\ne i}^{n-1} \frac{ m_j}{|| \mathbf{r}_i(t) - \mathbf{r}_j(t) ||^3}(\mathbf{r}_i(t) - \mathbf{r}_j(t)) $$
+
+    This project, will hence focus on solving this exact problem.
+
+    To make life easier, we will make some mathematical assumptions. Starting with the assumption that all the functions we will be dealing with, are functions of real numbers.
+
+    \newpage
+
+    \psection{Numerical Integration}
+
+    We know certain pieces of information, such as the conditions:
+    $$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(0) = \mathbf{v}_0 $$
+    Thus, we have an \emph{initial}-value problem. \\
+
+    If the conditions are of the form:
+    $$ \mathbf{r}_i(0) = \mathbf{r}_0,\ \mathbf{\dot{r}}_i(t) = \mathbf{r}_f $$
+    We call it a \emph{boundary}-value problem.\\
+
+    These problems are different enough that their numerical solutions are distinct.\\
+
+    We will now explore methods of how we can solve these problems in different contexts.\\
+    \\
+
+    An approach to numerical integration for solving our obtained differential equations would follow the steps:
+    \begin{itemize}
+        \item Given input data (Initial Conditions)
         \begin{itemize}
-            \item For each particle $i$:
+            \item For each timestep $\Delta t$:
             \begin{itemize}
-                \item Computer $F_i(t)$
-                \item Update $\mathbf{r_i}(t)$ and $\mathbf{\dot{r}}_i(t) = \mathbf{v}(t)$ for each particle $i$
+                \item For each particle $i$:
+                \begin{itemize}
+                    \item Computer $F_i(t)$
+                    \item Update $\mathbf{r_i}(t)$ and $\mathbf{\dot{r}}_i(t) = \mathbf{v}(t)$ for each particle $i$
+                \end{itemize}
             \end{itemize}
         \end{itemize}
+        \item Return position and velocity data computations.
     \end{itemize}
-    \item Return position and velocity data computations.
-\end{itemize}
-\newpage
+    \newpage
 
-\psubsection{Euler's Method}
-Euler's Method is designed to solve IVPs for first-order ordinary differential equations of the form:
-$$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
-Where it can be used the approximate numerically the values of the solution of the ODE: 
-$$ x_i=x_0+ih,\quad i=0,1, \dots,n, \nonumber $$
-Where:
-$$ h={b-x_0\over n}.\nonumber $$
+    \psubsection{Euler's Method}
+    Euler's Method is designed to solve IVPs for first-order ordinary differential equations of the form:
+    $$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
+    Where it can be used the approximate numerically the values of the solution of the ODE:
+    $$ x_i=x_0+ih,\quad i=0,1, \dots,n, \nonumber $$
+    Where:
+    $$ h={b-x_0\over n}.\nonumber $$
 
-We do this by starting with the tangent to an integral curve, given by:
-$$ \label{eq:3.1.2} y=y(x_i)+f(x_i,y(x_i))(x-x_i) $$
+    We do this by starting with the tangent to an integral curve, given by:
+    $$ \label{eq:3.1.2} y=y(x_i)+f(x_i,y(x_i))(x-x_i) $$
 
-Setting the step $(x-x_i)$ to $h$, and using the IC $y(x_0) = y_0$ we can give a general expression for all solutions to $y(x)$ as:
-$$ \label{eq:3.1.4} y_{i+1}=y_i+hf(x_i,y_i),\quad 0\le i\le n-1. $$
+    Setting the step $(x-x_i)$ to $h$, and using the IC $y(x_0) = y_0$ we can give a general expression for all solutions to $y(x)$ as:
+    $$ \label{eq:3.1.4} y_{i+1}=y_i+hf(x_i,y_i),\quad 0\le i\le n-1. $$
+
+    However, the problem we intend to solve, always involves second-order ODEs, as shown before. Luckily, there is a way to convert any such DE into two coupled first-order ODEs. Consider a generalized form of the n-body ODE we defined earlier:
+    $$  \mathbf{\ddot{r}}(t) = -\mathbf{r}(t) $$
+
+    We can convert this to a system of $2n$ first order ODEs:
+    $$  \mathbf{\dot{r}_i}(t) = \mathbf{v}_i(t)$$
+    $$\mathbf{\dot{v}_i}(t) = \frac{1}{m_i}\mathbf{F}_i(t)$$
+
+    Under the initial conditions:
+    $$ \mathbf{r}_i(0) = \mathbf{r}_i,0, \ \mathbf{v}_i(0) = \mathbf{v}_i,0 $$
+
+    Allowing us to numerically solve any system.
+
+    \psubsection{Runge Kutta Method (RK4)}
+    Consider the same IVP as before:
+    $$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
+    We pick a step-size $h>0$ and define:
+    $$ y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)h, $$
+    $$ t_{n+1} = t_n + h, \ n= 0,1,2,3,...,n $$
+
+    Where:
+    \begin{itemize}
+        \item $k_{1}=h f\left(t_{n}, y_{n}\right)$
+        \item $k_{2}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{1}\right)$
+        \item $k_{3}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{2}\right)$
+        \item $k_{4}=h f\left(t_{n}+h, y_{n}+k_{3}\right)$
+    \end{itemize}
+
+    However, as we reduce a second order ODE to 2 couples first order ODEs:
+    $$  \mathbf{\dot{r}_i}(t) = \mathbf{v}_i(t)$$
+    $$\mathbf{\dot{v}_i}(t) = \frac{1}{m_i}\mathbf{F}_i(t)$$
+
+    The k parameters of the RK4 solutions change to two sets, one for approximations of position, and one for velocity. Given as follows:
+    \begin{itemize}
+        \item $k_{1}=h \mathbf{v}\left(t_{i}, x_{i}, v_{i}\right)$
+        \item $k_{2}=h \mathbf{v}\left(t_{i} + \frac{h}{2}, x_{i} +\frac{hk_1}{2}, v_{i}+\frac{hl_1}{2}\right)$
+        \item $k_{3}=h \mathbf{v}\left(t_{i} + \frac{h}{2}, x_{i} +\frac{hk_2}{2}, v_{i}+\frac{hl_2}{2}\right)$
+        \item $k_{4}=h \mathbf{v}\left(t_{i}+h, x_{i}+hk_3, v_{i}+hl_3\right)$
+    \end{itemize}
+    $$ x_{i+1} = x_i + \frac{h}{6} \left( k_1 + 2k_2 + 2k_3 + k_4 \right) $$
+
+    And:
+    \begin{itemize}
+        \item $l_{1}=\frac{h}{m_i} \mathbf{F}\left(t_{i}, x_{i}, v_{i}\right)$
+        \item $k_{2}=\frac{h}{m_i} \mathbf{F}\left(t_{i} + \frac{h}{2}, x_{i} +\frac{hk_1}{2}, v_{i}+\frac{hl_1}{2}\right)$
+        \item $k_{3}=\frac{h}{m_i} \mathbf{F}\left(t_{i} + \frac{h}{2}, x_{i} +\frac{hk_2}{2}, v_{i}+\frac{hl_2}{2}\right)$
+        \item $k_{4}=\frac{h}{m_i} \mathbf{F}\left(t_{i}+h, x_{i}+hk_3, v_{i}+hl_3\right)$
+    \end{itemize}
+    $$ v_{i+1} = v_i + \frac{h}{6} \left( l_1 + 2l_2 + 2l_3 + l_4 \right) $$
+
+    \newpage
+
+    \psection{Tests}
+    To test whether our codes correctly solves any given n-body system, we will test against cases of the problem that are known to have analytic solutions.
+
+    Before that, lets explore some of the theory behind these problems:
+    \psubsection{Classical 2-Body Problem}
+
+    We will use the famous Kepler's problem as the first test to gauge how well our numerical methods work.
+
+    In classical mechanics, the Kepler problem is essentially a special case of the 2-body problem in which bodies interact a radial inverse square potential. The problem is to find their position/speeds as a time series, given their masses, and initial positions, velocities.
+
+    The central force between two objects is defined as:
+    $$ \mathbf{F} = \frac{k}{r^2} \mathbf{\hat(r)} $$
+    Which corresponds to the scalar potential:
+    $$ V(r) = \frac{k}{r} $$\\
+    The equation of motion of a point mass in a particle is given by:
+    $$ m\frac{d^2 r}{dt^2} - mr \omega^2 =
+    m\frac{d^2 r}{dt^2} - \frac{L^2}{mr^3} = -\frac{dV}{dr} $$
+
+    Where $w = \frac{d\theta}{dt}$ and $L= mr^2 \omega$ (angular momentum) is conserved.\\
+
+    This DE is of the same form as our general n-body ODE. Undee the condition that $L$ be non zero (which it is), we can convert this DE in polar coordinates, with $r$ being a $r(\theta)$ instead of $r(t)$:
+    $$ \frac{d}{dt} = \frac{L}{mr^{2}} \frac{d}{d\theta} $$
+
+    Making the DE independent of time:
+    $$ \frac{L}{r^2} \frac{d}{d\theta} \left( \frac{L}{mr^2} \frac{dr}{d\theta} \right)- \frac{L^2}{mr^3} = -\frac{dV}{dr} $$.
+
+    Finally we use chahnge of variable $u = \frac{1}{r}$ to make the ODE quasi-linear:
+    $$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
+
+    Which can be analytically solved to give us:
+    $$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
+    $$.
+
+    Here, $e$ represents the eccentricity of the orbit, with it ranging between $0$ and $1$. The lower bound corresponding to perfect circular motion, and the upper bound corresponding to an unbound parabola. It relates to energy as:
+    $e = \sqrt{1 + \frac{2EL^2}{k^2 m}}$.
+
+    Note that the eccentricity and angular momentum of the Earth are known to be:
+    \begin{itemize}
+        \item $e = 0.0167$
+        \item $L =  2.7\times10^{40} \frac{kg m^2}{s}$
+    \end{itemize}
+
+    We can use this solution to model the Earth-Sun system.
+
+    \psubsection{3-Body Problem, Lagrange Points}
+    As discussed earlier, the N-body problem has no analytical solutions in any cases involving 3 or more bodies. However, we do have some information from higher order problems that we can use to test our methods of integration.
+
+    One such example are the Lagrange points and how they appear in the restricted 3 body problem. This problem refers to a special case of the 3-body problem where 2 of the masses involved are much bigger than the third. Turns out that the geometry of this problem reveals the existence of 5 equilibrium points in space in the vicinity of the 2 massive bodies. These are called Lagrange points, and their coordinates can be found analytically.
+
+    Consider hence, the restricted 3 body problem. With 3 masses $M_1$, $M_2$ and $m$, where $M_1, M_2 >> m$, and their respective positions are given by $r_1$, $r_2$, $r$. The total force exerted on the small mass $m$ is hence:
+    $$ \mathbf{F}(t) = m\frac{d^2 \mathbf{r}(t)}{dt^2} = -\frac{G M_1 m}{|| \mathbf{r}(t) - \mathbf{r_1}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_1}_j(t))-\frac{G M_2 m}{|| \mathbf{r}(t) - \mathbf{r_2}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_2}_j(t)) $$
+
+    Once again, we have a variation of our n-body ODE. However, only stationary solutions are possible for this version. The process involves conversion to a rotating reference frame. We will not be listing the complete derivation, however the final relation is of the form:
+    $$ \mathbf{F}_{\Omega} = \Omega^2 (x-\frac{\beta R^3(x+\alpha R)}{((x+\alpha R)^2+y^2)^{3/2}}
+    -\frac{\alpha R^3(x-\beta R)}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{i}}  +
+    \Omega^2 (x-\frac{\beta R^3y}{((x+\alpha R)^2+y^2)^{3/2}}
+    -\frac{\alpha R^3y}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{j}}$$
+
+    where:
+    $$ \alpha = \frac{M_2}{M_1+M_2}, \ \ \beta = \frac{M_1}{M_1+M_2} $$\\
+
+    In the limit $\alpha << 1$, we get the following Lagrange points:
+    $$ L1: \bigg( R \bigg( 1-\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
+    $$ L2: \bigg( R \bigg( 1+\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
+    $$ L3: \bigg( -R \bigg( 1+\frac{15 \alpha}{12} \bigg), 0 \bigg) $$
+    $$ L4: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), \frac{R\sqrt{3}}{2} \bigg) $$
+    $$ L5: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), -\frac{R\sqrt{3}}{2} \bigg) $$
+
+    For the Earth-Sun system,:
+    \begin{itemize}
+        \item $\alpha \approx 3\times10^{-6} $
+        \item $R = 1 AU = 1.5 \times 10^8 km$
+    \end{itemize}
+
+    \newpage
+    \psection{Testing}
+    We can now use the previously exhbited methods of integrations to solve the tests we identified previously.
+
+    \psubsection{Kepler's Problem}
+    Recall that we identitied the following ODE to be solvable analytically:
+    $$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
+    Giving us a solution of the form:
+    $$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
+    $$.
 
 
-\psubsection{Runge Kutta Method (RK4)}
-Consider the same IVP as before:
-$$ \label{eq:3.1.1} y'=f(x,y),\quad y(x_0)=y_0 $$
-We pick a step-size $h>0$ and define:
-$$ y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)h, $$
-$$ t_{n+1} = t_n + h, \ n= 0,1,2,3,...,n $$
+    \psubsubsection{Euler's Method}
 
-Where:
-\begin{itemize}
-    \item $k_{1}=h f\left(t_{n}, y_{n}\right)$
-    \item $k_{2}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{1}\right)$
-    \item $k_{3}=h f\left(t_{n}+\frac{h}{2}, y_{n}+\frac{1}{2} k_{2}\right)$
-    \item $k_{4}=h f\left(t_{n}+h, y_{n}+k_{3}\right)$
-\end{itemize}
-
-\psubsubsection{Note: Coupled ODEs}
-Notice how the previous two methods of numerical integration allow for solution of first-order ODEs. However, the problem we intend to solve, always involves second-order ODEs, as shown before. Luckily, there is a way to convert any such DE into two coupled first-order ODEs. Consider a generalized form of the n-body ODE we defined earlier:
-$$  \mathbf{\ddot{r}}(t) = -\mathbf{r}(t) $$
-
-We can convert this to a system of $2n$ first order ODEs:
-$$  \mathbf{\dot{r}_i}(t) = \mathbf{v}_i(t)$$
-$$\mathbf{\dot{v}_i}(t) = \frac{1}{m_i}\mathbf{F}_i(t)$$
-
-Under the initial conditions:
-$$ \mathbf{r}_i(0) = \mathbf{r}_i,0, \ \mathbf{v}_i(0) = \mathbf{v}_i,0 $$
-
-Allowing us to numerically solve any system.
-\newpage
-
-\psection{Tests}
-To test whether our codes correctly solves any given n-body system, we will test against cases of the problem that are known to have analytic solutions.
-
-Before that, lets explore some of the theory behind these problems:
-\psubsection{Classical 2-Body Problem}
-
-We will use the famous Kepler's problem as the first test to gauge how well our numerical methods work. 
-
-In classical mechanics, the Kepler problem is essentially a special case of the 2-body problem in which bodies interact a radial inverse square potential. The problem is to find their position/speeds as a time series, given their masses, and initial positions, velocities. 
-
-The central force between two objects is defined as:
-$$ \mathbf{F} = \frac{k}{r^2} \mathbf{\hat(r)} $$
-Which corresponds to the scalar potential:
-$$ V(r) = \frac{k}{r} $$\\
-The equation of motion of a point mass in a particle is given by:
-$$ m\frac{d^2 r}{dt^2} - mr \omega^2 = 
-m\frac{d^2 r}{dt^2} - \frac{L^2}{mr^3} = -\frac{dV}{dr} $$
-
-Where $w = \frac{d\theta}{dt}$ and $L= mr^2 \omega$ (angular momentum) is conserved.\\
-
-This DE is of the same form as our general n-body ODE. Undee the condition that $L$ be non zero (which it is), we can convert this DE in polar coordinates, with $r$ being a $r(\theta)$ instead of $r(t)$:
-$$ \frac{d}{dt} = \frac{L}{mr^{2}} \frac{d}{d\theta} $$
-
-Making the DE independent of time:
-$$ \frac{L}{r^2} \frac{d}{d\theta} \left( \frac{L}{mr^2} \frac{dr}{d\theta} \right)- \frac{L^2}{mr^3} = -\frac{dV}{dr} $$.
-
-Finally we use chahnge of variable $u = \frac{1}{r}$ to make the ODE quasi-linear:
-$$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
-
-Which can be analytically solved to give us:
-$$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
-$$.
-
-Here, $e$ represents the eccentricity of the orbit, with it ranging between $0$ and $1$. The lower bound corresponding to perfect circular motion, and the upper bound corresponding to an unbound parabola. It relates to energy as:
-$e = \sqrt{1 + \frac{2EL^2}{k^2 m}}$. 
-
-Note that the eccentricity and angular momentum of the Earth are known to be:
-\begin{itemize}
-    \item $e = 0.0167$
-    \item $L =  2.7\times10^{40} \frac{kg m^2}{s}$
-\end{itemize}
-
-We can use this solution to model the Earth-Sun system. 
-
-\psubsection{3-Body Problem, Lagrange Points}
-As discussed earlier, the N-body problem has no analytical solutions in any cases involving 3 or more bodies. However, we do have some information from higher order problems that we can use to test our methods of integration. 
-
-One such example are the Lagrange points and how they appear in the restricted 3 body problem. This problem refers to a special case of the 3-body problem where 2 of the masses involved are much bigger than the third. Turns out that the geometry of this problem reveals the existence of 5 equilibrium points in space in the vicinity of the 2 massive bodies. These are called Lagrange points, and their coordinates can be found analytically. 
-
-Consider hence, the restricted 3 body problem. With 3 masses $M_1$, $M_2$ and $m$, where $M_1, M_2 >> m$, and their respective positions are given by $r_1$, $r_2$, $r$. The total force exerted on the small mass $m$ is hence:
-$$ \mathbf{F}(t) = m\frac{d^2 \mathbf{r}(t)}{dt^2} = -\frac{G M_1 m}{|| \mathbf{r}(t) - \mathbf{r_1}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_1}_j(t))-\frac{G M_2 m}{|| \mathbf{r}(t) - \mathbf{r_2}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_2}_j(t)) $$
-
-Once again, we have a variation of our n-body ODE. However, only stationary solutions are possible for this version. The process involves conversion to a rotating reference frame. We will not be listing the complete derivation, however the final relation is of the form:
-$$ \mathbf{F}_{\Omega} = \Omega^2 (x-\frac{\beta R^3(x+\alpha R)}{((x+\alpha R)^2+y^2)^{3/2}}
--\frac{\alpha R^3(x-\beta R)}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{i}}  + 
-\Omega^2 (x-\frac{\beta R^3y}{((x+\alpha R)^2+y^2)^{3/2}}
--\frac{\alpha R^3y}{((x-\beta R)^2+y^2)^{3/2}}) \hat{\mathbf{j}}$$
-
-where:
-$$ \alpha = \frac{M_2}{M_1+M_2}, \ \ \beta = \frac{M_1}{M_1+M_2} $$\\
-
-In the limit $\alpha << 1$, we get the following Lagrange points:
-$$ L1: \bigg( R \bigg( 1-\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
-$$ L2: \bigg( R \bigg( 1+\bigg(\frac{\alpha}{3}\bigg)^{1/3} \bigg), 0 \bigg) $$
-$$ L3: \bigg( -R \bigg( 1+\frac{15 \alpha}{12} \bigg), 0 \bigg) $$
-$$ L4: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), \frac{R\sqrt{3}}{2} \bigg) $$
-$$ L5: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), -\frac{R\sqrt{3}}{2} \bigg) $$
-
-For the Earth-Sun system,:
-\begin{itemize}
-    \item $\alpha \approx 3\times10^{-6} $
-    \item $R = 1 AU = 1.5 \times 10^8 km$
-\end{itemize}
-
-\newpage
-\psection{Testing}
-We can now use the previously exhbited methods of integrations to solve the tests we identified previously. 
-
-\psubsection{Kepler's Problem}
-Recall that we identitied the following ODE to be solvable analytically:
-$$ \frac{d^2 u}{d\theta^2} + u = -\frac{m}{L^2}  \frac{d}{du} V\left( \frac 1 u\right) = -\frac{km}{L^2} $$
-Giving us a solution of the form:
-$$u \equiv \frac{1}{r} = -\frac{km}{L^2} \left[ 1 + e \cos(\theta - \theta_0) \right]
-$$.
-
- 
-\psubsubsection{Euler's Method}
-
-\newpage
-\psection{Applications}
-\psubsection{Few Body Quantum system}
-\psubsection{Halley's Comet}
+    \newpage
+    \psection{Applications}
+    \psubsection{Few Body Quantum system}
+    \psubsection{Halley's Comet}
 
 
-\newpage
-\psection{Conclusions and Dicsussion}
+    \newpage
+    \psection{Conclusions and Dicsussion}
 \end{document}
