@@ -49,6 +49,7 @@
 
 \usepackage{color}
 \usepackage{tcolorbox}
+\usepackage{amssymb}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -565,4 +566,104 @@ system.simulate(until=3.154e7)
     \newpage
 
     \psection{Studies}
+    
+    \psubsection{Lagrange Points}
+
+    \psubsubsection{Background}
+    \begin{itemize}
+        \item As discussed earlier, the N-body problem has no analytical solutions in any cases involving 3 or more bodies. However, we do have some information from higher order problems that we can use to test our methods of integration.
+        \item One such example are the Lagrange points and how they appear in the restricted 3 body problem. This problem refers to a special case of the 3-body problem where 2 of the masses involved are much bigger than the third. Turns out that the geometry of this problem reveals the existence of 5 equilibrium points in space in the vicinity of the 2 massive bodies. These are called Lagrange points, and their coordinates can be found analytically.
+        \item Consider hence, the restricted 3 body problem. With 3 masses $M_1$, $M_2$ and $m$, where $M_1, M_2 \gg m$, and their respective positions are given by $r_1$, $r_2$, $r$. The total force exerted on the small mass $m$ is hence:
+        \[ \mathbf{F}(t) = m\frac{d^2 \mathbf{r}(t)}{dt^2} = -\frac{G M_1 m}{|| \mathbf{r}(t) - \mathbf{r_1}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_1}_j(t))-\frac{G M_2 m}{|| \mathbf{r}(t) - \mathbf{r_2}(t) ||^3}(\mathbf{r}(t) - \mathbf{r_2}_j(t)) \]
+        \item Once again, we have a variation of our n-body ODE. However, only stationary solutions are possible for this version. The process involves conversion to a rotating reference frame. We will not be listing the complete derivation, however the final relation is of the form:
+        \[ \mathbf{F}_{\Omega} = \Omega^2 \left(x-\frac{\beta R^3(x+\alpha R)}{((x+\alpha R)^2+y^2)^{3/2}}
+        -\frac{\alpha R^3(x-\beta R)}{((x-\beta R)^2+y^2)^{3/2}}\right) \hat{\mathbf{i}} +\]
+        \[\Omega^2 \left(x-\frac{\beta R^3 y}{((x+\alpha R)^2+y^2)^{3/2}}
+        -\frac{\alpha R^3 y}{((x-\beta R)^2+y^2)^{3/2}}\right) \hat{\mathbf{j}} \]
+
+        where:
+        \[ \alpha = \frac{M_2}{M_1+M_2}, \ \ \beta = \frac{M_1}{M_1+M_2} \]
+
+        \item In the limit $\alpha \ll 1$, we get the following Lagrange points:
+        \[ L1: \bigg( R \bigg( 1-\bigg(\frac{\alpha}{3}\bigg)^{\frac{1}{3}} \bigg), 0 \bigg) \]
+        \[ L2: \bigg( R \bigg( 1+\bigg(\frac{\alpha}{3}\bigg)^{\frac{1}{3}} \bigg), 0 \bigg) \]
+        \[ L3: \bigg( -R \bigg( 1+\frac{15 \alpha}{12} \bigg), 0 \bigg) \]
+        \[ L4: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), \frac{R\sqrt{3}}{2} \bigg) \]
+        \[ L5: \bigg( \frac{R}{2} \bigg(\frac{M_1-M_2}{M_1+M_2} \bigg), -\frac{R\sqrt{3}}{2} \bigg) \]
+
+        \item For the Earth-Sun system:
+        \[ \alpha \approx 3\times10^{-6} \]
+        \[ R = 1 \text{AU} = 1.5 \times 10^8 \text{km} \]
+    \end{itemize}
+
+    \psubsubsection{\texttt{Python}}
+    \begin{itemize}
+        \item The James Webb Space Telescope was positioned in a halo orbit about L2 on January 24, 2022. We can create a \texttt{jwst} object and set it in motion at $\approx$100$\frac{\text{m}}{\text{s}}$ to see how it behaves at L2:
+    \end{itemize}
+    \begin{lstlisting}[language=Python, caption=Simulate the system for 10 years]
+# Lagrange points
+alpha = 3e-6
+R = aconst.au.value
+L2 = [R * (1 + (alpha/3)**(1/3)), 0]
+
+jwst = Body(name="JWST",
+                 mass=0,
+                 position=[[L2[0] - (832e6 - 250e6)/2, 0]],
+                 velocity=[[0, 29784.8 + 93]])
+
+bodies = [jwst, earth, sun]
+
+system = System(bodies=bodies,
+                dt=10000,
+                algorithm=rk.RK4_algorithm,
+                law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
+
+# 10 Years
+system.simulate(until=3.154e7*10)
+    \end{lstlisting}
+
+    \begin{itemize}
+        \item On plotting the trajectory of \texttt{jwst} around the sun for these 10 years, we get:
+    \end{itemize}
+
+    \begin{center}
+        \includegraphics[scale = 0.8]{images/rk4_jwst}
+        \\ \caption{\textbf{Figure 7:} JWST-Earth-Sun simulation with RK4 integration (\textbf{10 years})}
+        \label{fig:fig7}
+    \end{center}
+    
+    \newpage
+    
+    \psection{Conclusion}
+    \psubsection{Algorithms}
+    \begin{itemize}
+        \item In this report, we initially ``brute-forced'' Euler's method to solve a coupled DE (first version).
+        \item After realizing that it doesn't scale well, (for instance, if the algorithm needed to be swapped out for another) we refactored the code to enable the algorithm to be passed as a constructor parameter to the \texttt{System} instance.
+        \item This change came about after the stark realization that the system didn't (and shouldn't) care about the algorithm at hand. It is only concerned with the gravitational law.
+        \item Similarly, the algorithm needs to know how to differentiate the state of the system to produce the next step in the state.
+        \item After generalizing the system to allow for these, we could easily swap out Euler for RK4 (or any other algorithm for that matter). Both \textbf{Euler's method} and \textbf{RK4 integration} were implemented in their own \texttt{Util} files.
+        \item RK4 was considerably slower than Euler but was more accurate since it interpolated using more granular time steps (averaged over them). This ``prevented'' energy loss over the time scales used and hence fit our needs better.
+    \end{itemize}
+    \psubsection{Tests}
+    \begin{itemize}
+        \item Both algorithms were tested on Earth-Sun and Halley-Earth-Sun systems. We saw that the earth continued to rotate in the same orbit for a 50 year simulation when RK4 integration was used.
+        \item Further, Halley's comet returned to it's initial position (0.5871 AU, from the Sun and between the Earth and the Sun) over it's orbit period of $\approx$76 years. All the while, Earth rotated in its orbit (when RK4 was used). In contrast to this, Euler produced the following inaccurate result:
+    \end{itemize}
+    \begin{center}
+        \includegraphics[scale = 1.2]{images/inaccurate-crop}
+        \\ \caption{\textbf{Figure 8:} Halley-Earth-Sun simulation with Euler's method}
+        \label{fig:fig8}
+    \end{center}
+
+    \psubsection{Studies}
+    \begin{itemize}
+        \item Finally, we took a brief look at how the JWST satellite behaved around the L2 Lagrange point which it orbits.
+        \item The plot revealed that it stays in orbit around L2 over the 10-year simulation using RK4.
+        \item Changing its momentum causes it to stray away from the L2 point and drift away from the Earth-Sun system:
+    \end{itemize}
+    \begin{center}
+        \includegraphics[scale = 1]{images/jwst_broken}
+        \\ \caption{\textbf{Figure 9:} JWST drifting away}
+        \label{fig:fig9}
+    \end{center}
 \end{document}
