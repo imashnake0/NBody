@@ -20,4 +20,5 @@ class PlotUtils:
         ax.set(xlabel="x", ylabel="y")
         
         ax.set_aspect('equal')
+        plt.savefig('plot.pdf')
         plt.show()

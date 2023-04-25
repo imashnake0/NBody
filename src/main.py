@@ -20,9 +20,9 @@ def main():
                  velocity=[[0, 29784.8]])
 
     halley = Body(name="Halley",
-                 mass=2.2e14, 
-                 position=[[0.5871*aconst.au.value, 0]], 
-                 velocity=[[0, 53545]])
+                  mass=2.2e14, 
+                  position=[[0.5871*aconst.au.value, 0]], 
+                  velocity=[[0, 53545]])
     
     
     sun = Body(name="Sun",
