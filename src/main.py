@@ -20,29 +20,32 @@ def main():
                  velocity=[[0, 29784.8]])
 
     halley = Body(name="Halley",
-                 mass=2.2e14, 
-                 position=[[0.5871*aconst.au.value, 0]], 
-                 velocity=[[0, 53545]])
+                  mass=2.2e14, 
+                  position=[[0.5871*aconst.au.value, 0]], 
+                  velocity=[[0, 53545]])
     
     
     sun = Body(name="Sun",
                mass=aconst.M_sun.value)
-    
-    L1 = [1.01*aconst.au.value, 0]
+
+    # Lagrange points
+    alpha = 3e-6
+    R = aconst.au.value
+    L2 = [R * (1 + (alpha/3)**(1/3)), 0]
 
     jwst = Body(name="JWST",
-                     mass=6500,
-                     position=[L1],
-                     velocity=[[0, 0]])
+                     mass=0,
+                     position=[[L2[0] - (832e6 - 250e6)/2, 0]],
+                     velocity=[[0, 29784.8 + 0]])
     
     bodies = [halley, earth, sun]
 
     system = System(bodies=bodies,
-                    dt=100000,
+                    dt=10000,
                     algorithm=rk.RK4_algorithm,
                     law=lambda m1, m2, x1, x2: ((coconst.G.value*m1*m2)/((lin.norm(x2 - x1))**3)) * (x2 - x1))
 
-    system.simulate(until=3.154e7*75)
+    system.simulate(until=3.154e7)
 
     PlotUtils.plot(bodies=bodies)
 
